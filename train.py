@@ -26,5 +26,10 @@ cli = MyLightningCLI(
     LitPosFormer,
     CROHMEDatamodule,
     save_config_overwrite=True,
-    trainer_defaults={"plugins": DDPPlugin(find_unused_parameters=True)},
+    trainer_defaults={
+        "plugins": {
+            "class_path": "pytorch_lightning.plugins.training_type.ddp.DDPPlugin",
+            "init_args": {"find_unused_parameters": True}
+        }
+    },
 )

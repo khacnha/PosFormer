@@ -1,0 +1,12 @@
+/dupsie
+**/__pycache__/
+
+
+*.env
+!.env.example
+
+/data
+/results
+*.csv
+*.txt
+!requirements.txt
