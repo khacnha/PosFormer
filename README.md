@@ -37,12 +37,13 @@ cd PosFormer
 # install project   
 conda create -y -n PosFormer python=3.7
 conda activate PosFormer
-conda install pytorch=1.8.1 torchvision=0.2.1 cudatoolkit=11.1 pillow=8.4.0 -c pytorch -c nvidia 
+conda install pytorch=1.8.1 cudatoolkit=11.1 pillow=8.4.0 -c pytorch -c nvidia 
 # training dependency
 conda install pytorch-lightning=1.4.9 torchmetrics=0.6.0 -c conda-forge
 # evaluating dependency
 conda install pandoc=1.19.2.1 -c conda-forge
 conda install opencv
+<conda path>/envs/PosFormer/bin/pip install git+https://github.com/pytorch/vision.git@v0.2.2
 <conda path>/envs/PosFormer/bin/pip install jsonargparse[signatures] einops
 <conda path>/envs/PosFormer/bin/python train.py --config config.yaml
 ```
