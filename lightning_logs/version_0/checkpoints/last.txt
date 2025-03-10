@@ -1,0 +1,5 @@
+Epoch 115:   3%| | 55/1767 [00:21<11:02,  2.58it/s, loss=0.066, v_num=., train_loss=0.0941, train_loss_pos=0.103, tra
+
+-rw-r--r-- 1 root root 78560160 Mar  4 01:07 'epoch=99-step=150099-val_ExpRate=0.5888.ckpt'
+-rw-r--r-- 1 root root 78560160 Mar  4 01:07 'epoch=99-step=150099-val_ExpRate=0.5888-v1.ckpt'
+-rw-r--r-- 1 root root 78560160 Mar  4 03:36  last.ckpt	
