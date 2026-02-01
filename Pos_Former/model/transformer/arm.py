@@ -24,18 +24,48 @@ class MaskBatchNorm2d(nn.Module):
         Tensor
             [b, d, h, w]
         """
-        x = rearrange(x, "b d h w -> b h w d")
-        mask = mask.squeeze(1)
-
-        not_mask = ~mask
-
-        flat_x = x[not_mask, :]
-        flat_x = self.bn(flat_x)
-        x[not_mask, :] = flat_x
-
-        x = rearrange(x, "b h w d -> b d h w")
-
-        return x
+        """
+        ONNX-compatible version of MaskBatchNorm2d.
+        
+        Original code uses boolean indexing which creates dynamic shapes in ONNX.
+        This version applies batch norm to the entire tensor, then masks invalid regions.
+        
+        In eval mode (inference), BatchNorm is a pointwise operation:
+          out = (x - running_mean) / sqrt(running_var + eps) * weight + bias
+        
+        So masking after is equivalent to masking before, as long as we restore
+        the masked values to 0 (or their original state).
+        """
+        # x: [b, d, h, w]
+        # mask: [b, 1, h, w]
+        
+        mask = mask.bool()
+        
+        if self.training:
+            # Training mode: use original logic
+            x_reshaped = rearrange(x, "b d h w -> b h w d")
+            mask_squeezed = mask.squeeze(1)
+            not_mask = ~mask_squeezed
+            flat_x = x_reshaped[not_mask, :]
+            flat_x = self.bn(flat_x)
+            x_reshaped[not_mask, :] = flat_x
+            return rearrange(x_reshaped, "b h w d -> b d h w")
+        else:
+            # Inference mode: ONNX-compatible approach
+            import torch.nn.functional as F
+            out = F.batch_norm(
+                x,
+                self.bn.running_mean,
+                self.bn.running_var,
+                self.bn.weight,
+                self.bn.bias,
+                self.bn.training,
+                self.bn.momentum,
+                self.bn.eps
+            )
+            # Restore masked positions to 0
+            out = out.masked_fill(mask, 0.0)
+            return out
 
 
 class AttentionRefinementModule(nn.Module):

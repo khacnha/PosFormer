@@ -6,6 +6,14 @@ from torchvision import transforms
 from Pos_Former.datamodule.transforms import ScaleToLimitRange
 from Pos_Former.datamodule import vocab
 
+# Monkeypatch torch.load
+_original_load = torch.load
+def _safe_load(*args, **kwargs):
+    if 'weights_only' not in kwargs:
+        kwargs['weights_only'] = False
+    return _original_load(*args, **kwargs)
+torch.load = _safe_load
+
 def load_model(checkpoint_path):
     """load model from checkpoint and set to evaluation mode"""
     model = LitPosFormer.load_from_checkpoint(checkpoint_path)
@@ -90,7 +98,7 @@ def main():
     checkpoint_path = "./lightning_logs/version_0/checkpoints/best.ckpt"
     
     # path to the image file
-    image_path = "./image.png"
+    image_path = "./inverted_image.png"
     
     # computing device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PosFormer Web</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- ONNX Runtime Web -->
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>PosFormer Web</h1>
+            <p>Mathematics Formula Recognition in Browser</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <input type="file" id="file-upload" accept="image/*">
+                <label for="file-upload" class="button">Choose Image</label>
+            </div>
+
+            <div class="result-section">
+                <div class="canvas-container">
+                    <canvas id="input-canvas"></canvas>
+                </div>
+
+                <div class="output-container">
+                    <h3>Result (LaTeX):</h3>
+                    <textarea id="output-text" readonly placeholder="Result will appear here..."></textarea>
+                    <div id="status">Status: Ready</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="vocab.js"></script>
+    <script src="utils.js"></script>
+    <script src="model.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
