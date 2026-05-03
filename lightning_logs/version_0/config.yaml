@@ -31,7 +31,7 @@ trainer:
   num_nodes: 1
   num_processes: 1
   devices: null
-  gpus: 0
+  gpus: 1
   auto_select_gpus: false
   tpu_cores: null
   ipus: null
@@ -42,7 +42,7 @@ trainer:
   check_val_every_n_epoch: 2
   fast_dev_run: false
   accumulate_grad_batches: 1
-  max_epochs: 300
+  max_epochs: 500
   min_epochs: null
   max_steps: null
   min_steps: null
@@ -61,7 +61,7 @@ trainer:
   weights_save_path: null
   num_sanity_val_steps: 1
   truncated_bptt_steps: null
-  resume_from_checkpoint: null
+  resume_from_checkpoint: lightning_logs/version_0/checkpoints/best.ckpt
   profiler: null
   benchmark: false
   deterministic: true
@@ -72,22 +72,7 @@ trainer:
   terminate_on_nan: false
   auto_scale_batch_size: false
   prepare_data_per_node: true
-  plugins:
-  - class_path: pytorch_lightning.plugins.DDPPlugin
-    init_args:
-      parallel_devices: null
-      num_nodes: null
-      cluster_environment: null
-      sync_batchnorm: null
-      ddp_comm_state: null
-      output_device: null
-      dim: 0
-      broadcast_buffers: true
-      process_group: null
-      bucket_cap_mb: 25.0
-      find_unused_parameters: true
-      check_reduction: false
-      gradient_as_bucket_view: false
+  plugins: null
   amp_backend: native
   amp_level: O2
   distributed_backend: null
@@ -113,7 +98,7 @@ model:
   learning_rate: 0.08
   patience: 20
 data:
-  zipfile_path: data_crohme.zip
+  zipfile_path: data_crohme1.zip
   test_year: '2014'
   train_batch_size: 8
   eval_batch_size: 4
