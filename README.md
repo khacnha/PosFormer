@@ -84,6 +84,58 @@ cd PosFormer
 python3 train.py --config config.yaml
 ```
 
+#### Training with Docker Compose
+
+If you prefer not to set up a Conda environment, you can run training inside a Docker container with GPU support. This requires [Docker](https://docs.docker.com/engine/install/), [Docker Compose](https://docs.docker.com/compose/install/), and the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html) installed on the host.
+
+1. **Prepare the dataset.** Place `data_crohme1.zip` (or the dataset referenced by `data.zipfile_path` in `config.yaml`) at the repository root. The current directory is bind-mounted into `/app` inside the container, so any local changes are picked up automatically.
+
+2. **Select the GPU.** Inside the container the assigned GPU is always exposed as device `0`. Edit `docker-compose.yml` if you want to pin a specific physical GPU on the host:
+
+   ```yaml
+   deploy:
+     resources:
+       reservations:
+         devices:
+           - driver: nvidia
+             device_ids: ['0']      # physical GPU index on the host
+             capabilities: [gpu]
+   environment:
+     - CUDA_VISIBLE_DEVICES=0       # always 0 inside the container
+   ```
+
+3. **Build the image** (only needed the first time, or after changing the `Dockerfile`):
+
+   ```bash
+   docker compose build
+   ```
+
+4. **Verify GPU access:**
+
+   ```bash
+   docker compose run --rm posformer nvidia-smi
+   docker compose run --rm posformer python3 -c "import torch; print(torch.cuda.is_available(), torch.cuda.device_count())"
+   ```
+
+   Both commands should report at least one available GPU.
+
+5. **Start the container** in the background and launch training:
+
+   ```bash
+   docker compose up -d
+   docker compose exec posformer python3 train.py --config config.yaml
+   ```
+
+   Checkpoints and TensorBoard logs are written to `lightning_logs/` on the host because of the bind mount.
+
+6. **Stop the container** when training is finished:
+
+   ```bash
+   docker compose down
+   ```
+
+> **Tip:** To train on multiple GPUs, increase `count` (or list more `device_ids`) in `docker-compose.yml`, set `CUDA_VISIBLE_DEVICES` accordingly (e.g. `0,1`), and update `trainer.gpus` in `config.yaml` to the matching number.
+
 ### Evaluation 
 
 
