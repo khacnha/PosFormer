@@ -1,20 +1,16 @@
-version: '3.8'
 
 services:
-  posformer-api:
+  posformer:
     build: .
-    container_name: posformer-api
-    ports:
-      - "5000:8000"
+    container_name: posformer
     volumes:
       - ./:/app/
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
-    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     environment:
       - CUDA_VISIBLE_DEVICES=0

@@ -16,10 +16,10 @@ trainer:
   # gpus: 0, 1, 2, 3  
   # accelerator: ddp
   check_val_every_n_epoch: 2
-  max_epochs: 300
+  max_epochs: 500
   deterministic: true
   num_sanity_val_steps: 1
-  # resume_from_checkpoint: 
+  resume_from_checkpoint: lightning_logs/version_0/checkpoints/best.ckpt
 model:
   d_model: 256
   # encoder
@@ -33,7 +33,7 @@ model:
   dc: 32
   cross_coverage: true
   self_coverage: true
-  # beam search
+  # beam search - me: 5
   beam_size: 10
   max_len: 200
   alpha: 1.0
@@ -43,9 +43,10 @@ model:
   learning_rate: 0.08
   patience: 20
 data:
-  zipfile_path: data_crohme.zip
+  zipfile_path: data_crohme1.zip
   test_year: '2014' 
   train_batch_size: 8
-  eval_batch_size: 4 
+  # - me: 1
+  eval_batch_size: 4
   num_workers: 5
   scale_aug: True

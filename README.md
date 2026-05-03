@@ -81,7 +81,7 @@ For training, we utilize a single A800 GPU; however, an RTX 3090 GPU also provid
 
 ```bash
 cd PosFormer
-python train.py --config config.yaml
+python3 train.py --config config.yaml
 ```
 
 ### Evaluation 

@@ -37,8 +37,5 @@ RUN pip3 install --no-cache-dir \
 # Cài đặt torchvision từ nguồn cụ thể (nếu cần)
 RUN pip3 install git+https://github.com/pytorch/vision.git@v0.2.2
 
-# Mở cổng cho FastAPI
-EXPOSE 8000
 
-# Lệnh chạy khi container khởi động
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["tail", "-f", "/dev/null"]

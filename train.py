@@ -1,4 +1,4 @@
-from pytorch_lightning.plugins.training_type.ddp import DDPPlugin
+# from pytorch_lightning.plugins.training_type.ddp import DDPPlugin
 from pytorch_lightning.utilities.cli import LightningCLI
 from pytorch_lightning.loggers import TensorBoardLogger
 import pytorch_lightning as pl
@@ -26,12 +26,13 @@ cli = MyLightningCLI(
     LitPosFormer,
     CROHMEDatamodule,
     save_config_overwrite=True,
-    trainer_defaults={
-        "plugins": [
-            {
-                "class_path": "pytorch_lightning.plugins.training_type.ddp.DDPPlugin",
-                "init_args": {"find_unused_parameters": True}
-            }
-        ]
-    },
+    # if using more 2 gpu
+    # trainer_defaults={
+    #     "plugins": [
+    #         {
+    #             "class_path": "pytorch_lightning.plugins.training_type.ddp.DDPPlugin",
+    #             "init_args": {"find_unused_parameters": True}
+    #         }
+    #     ]
+    # },
 )
