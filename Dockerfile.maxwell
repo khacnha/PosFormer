@@ -1,0 +1,53 @@
+FROM nvcr.io/nvidia/cuda:10.2-cudnn7-runtime-ubuntu18.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# NVIDIA rotated GPG keys (Apr 2022); old image's apt sources are now invalid.
+# We don't need new CUDA packages from apt — runtime libs are already in the image.
+RUN rm -f /etc/apt/sources.list.d/cuda.list \
+          /etc/apt/sources.list.d/nvidia-ml.list \
+          /etc/apt/sources.list.d/cuda*.list \
+          /etc/apt/sources.list.d/nvidia*.list
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    software-properties-common \
+    gnupg2 \
+    ca-certificates \
+    && add-apt-repository ppa:deadsnakes/ppa -y \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    python3.7 \
+    python3.7-dev \
+    python3.7-distutils \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    pandoc \
+    wget \
+    git \
+    six \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -sf /usr/bin/python3.7 /usr/local/bin/python3 \
+    && wget https://bootstrap.pypa.io/pip/3.7/get-pip.py \
+    && python3 get-pip.py \
+    && rm get-pip.py \
+    && ln -sf /usr/local/bin/pip3 /usr/local/bin/pip
+
+WORKDIR /app
+
+COPY . /app/
+
+RUN pip3 install --no-cache-dir torch==1.8.1+cu102 torchvision==0.9.1+cu102 \
+    -f https://download.pytorch.org/whl/torch_stable.html
+
+RUN pip3 install --no-cache-dir \
+    pytorch-lightning==1.4.9 \
+    torchmetrics==0.6.0 \
+    pillow==8.4.0 \
+    opencv-python \
+    fastapi \
+    uvicorn \
+    python-multipart \
+    "jsonargparse[signatures]" \
+    einops
+
+CMD ["tail", "-f", "/dev/null"]

@@ -1,0 +1,18 @@
+
+services:
+  posformer:
+    build:
+      context: .                                                                  
+      dockerfile: Dockerfile.maxwell
+    container_name: posformer
+    volumes:
+      - ./:/app/
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
