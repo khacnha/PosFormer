@@ -23,7 +23,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pandoc \
     wget \
     git \
-    six \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ln -sf /usr/bin/python3.7 /usr/local/bin/python3 \
@@ -48,6 +47,7 @@ RUN pip3 install --no-cache-dir \
     uvicorn \
     python-multipart \
     "jsonargparse[signatures]" \
-    einops
+    einops \
+    six
 
 CMD ["tail", "-f", "/dev/null"]
