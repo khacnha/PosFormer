@@ -35,7 +35,7 @@ class DecoderWrapper(nn.Module):
         return out[:, -1, :] # Return only the logits for the last token
 
 def export_onnx():
-    checkpoint_path = "./lightning_logs/version_0/checkpoints/best.ckpt"
+    checkpoint_path = "./lightning_logs/version_0/checkpoints/best_v1.ckpt"
     output_dir = "./web/public/models" # Exporting directly to web public dir
     os.makedirs(output_dir, exist_ok=True)
 

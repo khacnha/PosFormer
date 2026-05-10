@@ -5,4 +5,5 @@
 .venv
 
 /data
+/data_*
 /lightning_logs
